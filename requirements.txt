@@ -1,0 +1,11 @@
+crewai
+langchain-openai
+PyMuPDF
+Flask
+Flask-Cors
+python-docx
+python-dotenv
+mysql-connector-python
+sqlalchemy
+flask-mysqldb
+pandas

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HireVell AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+ 
+        header {
+            background-color: #72afb127;
+            text-align: left;
+            padding: 10px 15px;
+        }
+        header .container {
+            padding-left: 15px !important;
+            margin-left: 0 !important;
+        }
+ 
+        nav h1 {
+            margin: 0;
+            color: white;
+        }
+ 
+        nav a {
+            text-decoration: none;
+            color: white;
+        }
+ 
+        .upload-area {
+            border: 1px dashed #ccc;
+            border-radius: 6px;
+            padding: 15px 20px;
+            text-align: left;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            max-width:700px; /* makes it more compact */
+            margin: 0 auto; /* centers it */
+        }
+ 
+        .upload-area:hover {
+            background-color: #f9f9f9;
+            border-color: #0dcaf0;
+        }
+ 
+        .upload-area i {
+            font-size: 1.5rem;
+            color: #0dcaf0;
+            margin-bottom: 5px;
+        }
+ 
+        .upload-area p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+ 
+        .file-list {
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: #555;
+            text-align: left;
+        }
+        .container.my-5 {
+            background-color: #72afb127;
+            padding: 30px;
+            border-radius: 10px;
+        }
+ 
+        .features .card {
+            background-color: #fdfdfd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 8px;
+        }
+ 
+        .features i {
+            font-size: 2rem;
+            color: #0dcaf0;
+            margin-bottom: 10px;
+        }
+ 
+        .file-list {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+            text-align: left;
+            word-break: break-all;
+        }
+        .div1 {
+            text-align: center;
+            position: absolute;
+            left: 610px;
+        }
+    </style>
+</head>
+ 
+<body>
+    <header class="py-4 mb-4 border-bottom">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <!-- Replace icon with logo image -->
+                <img src="{{ url_for('static', filename='images/veltris-logo.svg') }}" alt="Logo" class="me-5" style="height: 65px;">
+               
+                <div class="div1">
+                    <h2 class="mb-0 fw-bold">HireVell AI</h2>
+                    <p class="text-muted mb-0">AI-Powered Resume Screening</p>
+                </div>
+            </div>
+        </div>
+    </header>
+ 
+    <div class="container my-5">
+        <div class="content mb-4 text-center d-flex flex-column align-items-center justify-content-center">
+            <!-- <h2><b>RESUME ANALYZER</b></h2> -->
+            <h5>Our AI-powered recruitment platform uses a multi-agent system to analyze and score resumes against job descriptions efficiently.</h5>
+        </div>
+        <!-- Features Section -->
+        <div class="row mt-5 mb-5 features text-center">
+            <!-- <div class="col-12 mb-3">
+                <h4><b>Key Features</b></h4>
+            </div> -->
+            <div class="col-md-4 mb-3">
+                <div class="card p-3">
+                    <i class="fas fa-brain"></i>
+                    <h5 class="mt-2">AI-Powered Analysis</h5>
+                    <p>Smart agents assess resumes using logic and reasoning like human experts.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card p-3">
+                    <i class="fas fa-chart-line"></i>
+                    <h5 class="mt-2">Detailed Scoring</h5>
+                    <p>Each resume is scored with detailed feedback on how well it matches the role.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card p-3">
+                    <i class="fas fa-question-circle"></i>
+                    <h5 class="mt-2">Interview Questions</h5>
+                    <p>Auto-generated questions for shortlisted candidates to streamline interviews.</p>
+                </div>
+            </div>
+        </div>
+ 
+        {% if error %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endif %}
+ 
+        <form action="/" method="post" enctype="multipart/form-data">
+    <div class="row mb-4">
+        <!-- Job Description Upload -->
+        <div class="col-md-6">
+            <label class="form-label fw-bold">Upload Job Description</label>
+            <div class="upload-area d-flex align-items-center gap-2" onclick="document.getElementById('job_desc').click()">
+                <i class="fas fa-file-upload fa-2x"></i>
+                <p class="mb-0">Click or drag a file to upload your job description (PDF, DOCX, TXT)</p>
+                <input type="file" name="job_desc" id="job_desc" class="form-control d-none" accept=".pdf,.docx,.txt" />
+            </div>
+            <div id="job-desc-file-list" class="file-list"></div>
+            {% if current_job_desc %}
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" name="retain_job_desc" id="retain_job_desc" checked />
+                <label class="form-check-label" for="retain_job_desc">Retain Previous Job Description</label>
+                <p class="text-muted">Previous Job Description: {{ current_file_name }}</p>
+            </div>
+            {% endif %}
+        </div>
+ 
+        <!-- Resume Upload -->
+        <div class="col-md-6">
+            <label class="form-label fw-bold">Upload Resume Files</label>
+            <div class="upload-area d-flex align-items-center gap-2" onclick="document.getElementById('resumes').click()">
+                <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                <p class="mb-0">Click or drag files to upload resumes (PDF, DOCX, TXT)</p>
+                <input type="file" name="resumes" id="resumes" class="form-control d-none" multiple accept=".pdf,.docx,.txt" />
+            </div>
+            <div id="resume-file-list" class="file-list"></div>
+        </div>
+    </div>
+ 
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-cogs me-2"></i> Analyze Resumes
+        </button>
+    </div>
+</form>
+ 
+    </div>
+ 
+    <script>
+        // Function to display selected file names
+        function displayFileNames(inputElement, displayElementId) {
+            const fileList = inputElement.files;
+            const displayElement = document.getElementById(displayElementId);
+            displayElement.innerHTML = ''; // Clear previous content
+ 
+            if (fileList.length > 0) {
+                const ul = document.createElement('ul');
+                ul.className = 'list-unstyled';
+                for (let i = 0; i < fileList.length; i++) {
+                    const li = document.createElement('li');
+                    li.textContent = fileList[i].name;
+                    ul.appendChild(li);
+                }
+                displayElement.appendChild(ul);
+            }
+        }
+ 
+        // Event listener for job description file input
+        document.getElementById("job_desc").addEventListener("change", function () {
+            displayFileNames(this, 'job-desc-file-list');
+        });
+ 
+        // Event listener for resume files input
+        document.getElementById("resumes").addEventListener("change", function () {
+            displayFileNames(this, 'resume-file-list');
+        });
+    </script>
+</body>
+ 
+</html>
