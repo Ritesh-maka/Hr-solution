@@ -1,0 +1,18 @@
+name: PR Title Convention Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  check-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if PR title does not follow convention
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          echo "PR title: $PR_TITLE"
+          if [[ ! "$PR_TITLE" =~ ^[A-Z]+-[0-9]+: ]]; then
+            echo "PR title '$PR_TITLE' does not follow the naming convention!"
+            exit 1
+          fi
