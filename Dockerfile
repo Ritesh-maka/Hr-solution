@@ -2,7 +2,7 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install required system packages for mysqlclient
+# Install required system packages for mysqlclient-test-txt
 RUN apt-get update && apt-get install -y \
     gcc \
     default-libmysqlclient-dev \
