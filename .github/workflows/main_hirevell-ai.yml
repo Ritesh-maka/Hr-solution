@@ -1,8 +1,6 @@
 name: Deploy Python app to Azure Web App - HireVell-AI
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -31,3 +29,4 @@ jobs:
           slot-name: 'Production'
           package: .
           startup-command: 'gunicorn --bind=0.0.0.0:${PORT} main_test:app'
+
