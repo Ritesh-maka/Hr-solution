@@ -1,63 +1,33 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy container app to Azure Web App - HRSolution
+name: Deploy Python app to Azure Web App - HireVell-AI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read #This is required for actions/checkout
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to container registry
-        uses: docker/login-action@v2
-        with:
-          registry: hrsolution.azurecr.io/
-          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_A0AFF989E83149739D6931CDD4141CC9 }}
-          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_0C8C5A1381334067A366BA047A749E2F }}
-
-      - name: Build and push container image to registry
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: hrsolution.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_A0AFF989E83149739D6931CDD4141CC9 }}/hr-solution-latest:${{ github.sha }}
-          file: ./Dockerfile
-
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
 
-    needs: build
-    
     steps:
-      
-      - name: Login to Azure
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3537949C6BE4445791EEBB780048E309 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_30F654D13BCB43D8A01E45A8C5D92896 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_39292B481A43447CB2DA9E1E7265BF51 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D6868731433241C1B772FF65DDC9D594 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_71024B08022441AAB3AA6D4447071F53 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AF1083A0745C40B682AC3B9644235D4E }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
-          app-name: 'HRSolution'
+          app-name: 'HireVell-AI'
           slot-name: 'Production'
-          images: 'hrsolution.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_A0AFF989E83149739D6931CDD4141CC9 }}/hr-solution-latest:${{ github.sha }}'
-          
+          package: .
+          startup-command: 'gunicorn --bind=0.0.0.0:${PORT} main_test:app'
