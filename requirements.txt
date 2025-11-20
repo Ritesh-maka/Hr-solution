@@ -9,3 +9,4 @@ mysql-connector-python
 sqlalchemy
 flask-mysqldb
 pandas
+IPython
