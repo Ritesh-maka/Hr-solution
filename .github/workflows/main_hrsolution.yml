@@ -1,4 +1,4 @@
-name: Deploy Python app to Azure Web App - HireVell-AI
+name: Deploy Python app to Azure Web App - HRSolution
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'HireVell-AI'
+          app-name: 'HRSolution'
           slot-name: 'Production'
           package: .
-          startup-command: 'gunicorn --bind=0.0.0.0:${PORT} main_test:app'
+          startup-command: 'python main_test.py'
